@@ -77,6 +77,14 @@ function addItem() {
     }
   }
 
+  document.getElementById('openAddModalBtn')
+  .addEventListener('click', () => {
+    openModal('addModal');
+    const input = document.querySelector('#grocery-add');
+    if (input) input.focus(); // vem direto do clique do usuário
+  });
+
+
 // Item of the list toggle on and off
 function toggleBox() {
     const box = document.getElementById('box');
