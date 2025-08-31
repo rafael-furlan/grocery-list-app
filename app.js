@@ -125,6 +125,13 @@ function openModal(modalId) {
       if (input) input.focus();
     });
   }
+
+  openModal('addModal');
+setTimeout(() => {
+  const input = document.querySelector('#grocery-add');
+  if (input) input.focus();
+}, 300); // depois da animação
+
   
   function closeModal(modalId) {
     const modal = document.getElementById(modalId);
