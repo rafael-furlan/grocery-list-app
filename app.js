@@ -8,9 +8,6 @@ const groceryEdit = document.getElementById('grocery-edit');
 const submitAddBtn = document.getElementById('submit-add');
 const submitEditBtn = document.getElementById('submit-edit');
 
-// Botão que abre o modal de "Add"
-const openAddBtn = document.getElementById('openAddModalBtn');
-
 // edit option
 let editElement;
 let editFlag = false;
@@ -20,7 +17,6 @@ let editID = "";
 submitAddBtn.addEventListener('click', addItem);
 clearBtn.addEventListener('click', ClearItems);
 
-// Delegação para toggle de done (evita um listener por item)
 list.addEventListener('click', function (e) {
   // Ignora cliques no botão de editar
   if (e.target.closest('.edit-btn')) return;
@@ -33,23 +29,6 @@ list.addEventListener('click', function (e) {
   setItemDoneUI(item, done);
   toggleDoneInLocalStorage(id, done);
 });
-
-// Foco robusto em mobile: acople ao gesto do usuário (pointerup + click fallback)
-if (openAddBtn) {
-  const onOpenAdd = () => {
-    openModal('addModal');
-    const input = document.querySelector('#addModal #grocery-add');
-    if (!input) return;
-
-    if (!tryFocus(input)) {
-      // fallback de ponte para devices teimosos (iOS principalmente)
-      focusWithBridge(input);
-    }
-  };
-
-  openAddBtn.addEventListener('pointerup', onOpenAdd, { passive: true });
-  openAddBtn.addEventListener('click', onOpenAdd);
-}
 
 // ****** FUNCTIONS **********
 function addItem() {
@@ -75,7 +54,7 @@ function addItem() {
         </button>
       </div>`;
 
-    // attach only edit event (mantido)
+    // attach only edit event
     element.querySelector('.edit-btn').addEventListener('click', editItem);
 
     // aplica UI inicial
@@ -92,12 +71,12 @@ function addItem() {
     groceryAdd.value = "";
     closeModal('addModal');
 
-    // atualiza empty-state
+    // empty-state
     toggleEmptyState();
   }
 }
 
-// Item of the list toggle on and off (se necessário noutros lugares)
+// Item of the list toggle on and off
 function toggleBox() {
   const box = document.getElementById('box');
   box.classList.toggle('active');
@@ -108,13 +87,11 @@ function toggleEmptyState() {
   const items = document.querySelectorAll('.grocery-item');
   const emptyState = document.querySelector('.empty-state');
 
-  if (!emptyState) return; // segurança
+  if (!emptyState) return;
 
   if (items.length === 0) {
-    // nenhum item → mostra o empty state
     emptyState.style.display = 'flex';
   } else {
-    // 1 ou mais itens → esconde o empty state
     emptyState.style.display = 'none';
   }
 }
@@ -124,7 +101,6 @@ function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (!modal) return;
 
-  // Evite transform/filters no .modal (bug iOS). Anime apenas .modal-content.
   modal.style.display = "flex";
   modal.style.alignItems = "flex-end";
   modal.style.zIndex = "1000";
@@ -134,44 +110,6 @@ function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (!modal) return;
   modal.style.display = "none";
-}
-
-// Helper: tenta focar de forma “limpa” e marcar caret no final
-function tryFocus(input) {
-  input.removeAttribute('readonly');
-  input.removeAttribute('disabled');
-
-  input.focus({ preventScroll: true });
-
-  const val = input.value ?? '';
-  try { input.setSelectionRange(val.length, val.length); } catch {}
-
-  return document.activeElement === input;
-}
-
-// Fallback de “ponte” para forçar teclado em iOS/Android teimosos
-function focusWithBridge(targetInput) {
-  const bridge = document.createElement('input');
-  bridge.type = 'text';
-  bridge.autocomplete = 'off';
-  bridge.inputMode = 'text';
-  Object.assign(bridge.style, {
-    position: 'fixed',
-    opacity: '0',
-    pointerEvents: 'none',
-    bottom: '0',
-    left: '0',
-  });
-  document.body.appendChild(bridge);
-
-  bridge.focus();
-
-  setTimeout(() => {
-    targetInput.focus({ preventScroll: true });
-    const v = targetInput.value ?? '';
-    try { targetInput.setSelectionRange(v.length, v.length); } catch {}
-    document.body.removeChild(bridge);
-  }, 50);
 }
 
 // clear items
@@ -201,12 +139,6 @@ function editItem(e) {
   editElement = element;
 
   openModal('editModal');
-
-  // Foco no input de edição — aqui o gesto veio do botão de editar (clique do usuário)
-  const input = document.querySelector('#editModal #grocery-edit') || groceryEdit;
-  if (input && !tryFocus(input)) {
-    focusWithBridge(input);
-  }
 }
 
 // confirmar edição
@@ -231,7 +163,7 @@ function deleteFromEdit() {
     removeFromLocalStorage(id);
     closeModal('editModal');
 
-    // empty-state após deletar
+    // empty-state
     toggleEmptyState();
   }
 }
@@ -245,7 +177,7 @@ function setBackToDefault() {
   editElement = null;
 }
 
-// toggle de UI done/undone
+// toggle
 function setItemDoneUI(element, done) {
   element.dataset.done = String(done);
 
@@ -279,7 +211,6 @@ function getLocalStorage() {
   } catch {
     items = [];
   }
-  // migração: garante a propriedade done
   return items.map(it => ({ id: it.id, value: it.value, done: Boolean(it.done) }));
 }
 
@@ -341,7 +272,7 @@ function createListItem(id, value, done = false) {
       <button type="button" class="edit-btn" aria-label="Editar">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24" height="24" fill="none">
           <path d="M6 24C6 21.7909 7.79086 20 10 20C12.2091 20 14 21.7909 14 24C14 26.2091 12.2091 28 10 28C7.79086 28 6 26.2091 6 24ZM20 24C20 21.7909 21.7909 20 24 20C26.2091 20 28 21.7909 28 24C28 26.2091 26.2091 28 24 28C21.7909 28 20 26.2091 20 24ZM34 24C34 21.7909 35.7909 20 38 20C40.2091 20 42 21.7909 42 24C42 26.2091 40.2091 28 38 28C35.7909 28 34 26.2091 34 24Z"/>
-        </svg>
+      </svg>
       </button>
     </div>`;
 
@@ -352,9 +283,10 @@ function createListItem(id, value, done = false) {
 
   list.appendChild(element);
 
-  // atualiza empty-state
+  // empty-state
   toggleEmptyState();
 }
+
 
 
   
