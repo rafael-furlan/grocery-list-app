@@ -16,7 +16,7 @@
     <div class="grocery-form">
       <h1>🥕 Grocery List</h1>
     </div>
-    
+
     <!--empty state -->
     <div class="empty-state">
         <p>🍎🍋🥑🍇</p>
@@ -31,23 +31,24 @@
     </div>
   </section>
 
-  <!-- Modal adding-->
-  <div id="addModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>New Item</h2>
-        <span onclick="closeModal('addModal')" class="close">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48" >
-                <path xmlns="http://www.w3.org/2000/svg" d="M34.5859 10.5859C35.367 9.80486 36.633 9.80486 37.414 10.5859C38.1951 11.367 38.1951 12.633 37.414 13.414L26.8281 24L37.414 34.5859C38.1951 35.367 38.1951 36.633 37.414 37.414C36.633 38.1951 35.367 38.1951 34.5859 37.414L24 26.8281L13.414 37.414C12.633 38.1951 11.367 38.1951 10.5859 37.414C9.80486 36.633 9.80486 35.367 10.5859 34.5859L21.1718 24L10.5859 13.414C9.80486 12.633 9.80486 11.367 10.5859 10.5859C11.367 9.80486 12.633 9.80486 13.414 10.5859L24 21.1718L34.5859 10.5859Z"/>
-            </svg>
-        </span>
-      </div>
-      <div class="form-control">
-        <input type="text" id="grocery-add" placeholder="Add groceries">
-        <button type="button" id="submit-add" class="submit-btn">Add</button>
-      </div>
+  <!-- Modal adding -->
+<div id="addModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>New Item</h2>
+      <span class="close" onclick="closeModal('addModal')" aria-label="Fechar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 48 48" fill="currentColor">
+          <path d="M34.5859 10.5859C35.367 9.80486 36.633 9.80486 37.414 10.5859C38.1951 11.367 38.1951 12.633 37.414 13.414L26.8281 24L37.414 34.5859C38.1951 35.367 38.1951 36.633 37.414 37.414C36.633 38.1951 35.367 38.1951 34.5859 37.414L24 26.8281L13.414 37.414C12.633 38.1951 11.367 38.1951 10.5859 37.414C9.80486 36.633 9.80486 35.367 10.5859 34.5859L21.1718 24L10.5859 13.414C9.80486 12.633 9.80486 11.367 10.5859 10.5859C11.367 9.80486 12.633 9.80486 13.414 10.5859L24 21.1718L34.5859 10.5859Z"/>
+        </svg>
+      </span>
+    </div>
+    <div class="form-control">
+      <input type="text" id="grocery-add" placeholder="Add groceries">
+      <button type="button" id="submit-add" class="submit-btn">Add</button>
     </div>
   </div>
+</div>
+
 
   <!-- Modal editing-->
   <div id="editModal" class="modal">

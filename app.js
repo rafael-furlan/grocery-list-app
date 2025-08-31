@@ -102,20 +102,31 @@ function toggleBox() {
 
 // Modal
 function openModal(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+  
     modal.style.display = "flex";
     modal.style.alignItems = "flex-end";
     modal.style.zIndex = "1000";
+  
+    // Garantir foco após o repaint
+    requestAnimationFrame(() => {
+      const input =
+        modal.querySelector("#grocery-add") ||
+        modal.querySelector("#grocery-edit");
+      if (input) input.focus();
+    });
   }
-}
-
-function closeModal(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) {
+  
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
     modal.style.display = "none";
   }
-}
+  
+  
+  setTimeout(() => input.focus(), 50);
+
 
 // clear items
 function ClearItems() {
@@ -129,7 +140,7 @@ function ClearItems() {
     setBackToDefault();
     localStorage.removeItem("groceryList");
   
-    // 👉 garante que o empty state volte a aparecer
+    // empty-state
     toggleEmptyState();
   }
   
@@ -147,7 +158,7 @@ function editItem(e) {
   openModal('editModal');
 }
 
-// confirmar edição
+// confirm edição
 submitEditBtn.addEventListener('click', function() {
   if (groceryEdit.value && editFlag) {
     editElement.querySelector(".item-name").textContent = groceryEdit.value;
@@ -214,7 +225,7 @@ function addToLocalStorage(id, value, done = false) {
     } catch {
       items = [];
     }
-    // migração: garante a propriedade done
+    
     return items.map(it => ({ id: it.id, value: it.value, done: Boolean(it.done) }));
   }
   
